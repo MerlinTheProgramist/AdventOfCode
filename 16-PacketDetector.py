@@ -23,10 +23,10 @@ def DecodePacket(pack):
 
         print('left over: ', pack)
         print(f'--- END PACKET {version} ---')
-        return version, pack
+        return literal, pack
              
     else:
-        packetsSum=0
+        packagesValues=[]
         print('lenght ID type: ',pack[0])
         # Check the lenght type ID bit
         if(pack[0]=='0'):
@@ -41,9 +41,7 @@ def DecodePacket(pack):
                 lenght-=len(pack) - len(o)
                 
                 pack = o
-                
-                
-                packetsSum += out
+                packagesValues.append(out)
         else: # lenght type ID == 1
             pack = pack[1:]
 
@@ -51,14 +49,35 @@ def DecodePacket(pack):
             print('quantity: ',quantity)
             while quantity>0:
                 out,pack = DecodePacket(pack)
-                packetsSum+=out
+                packagesValues.append(out)
                 quantity-=1
-
+        
+        val = 0
+        print('values:',packagesValues)
+        # OPERATIONS
+        if(len(packagesValues)==1):
+            val =  packagesValues[0]
+        
+        if(typeID == 0): # SUM
+            val =  sum(packagesValues)
+        if(typeID == 1): # PRODUCT
+            val =  m.prod(packagesValues)
+        if(typeID == 2): #MIN
+            val =  min(packagesValues)
+        if(typeID == 3): #MAX
+            val =  max(packagesValues)
+        if(typeID == 5): #GRATER THAN
+            val =  1 if packagesValues[0] > packagesValues[1] else 0
+        if(typeID == 6): #LESS THAN
+            val =  1 if packagesValues[0] < packagesValues[1] else 0
+        if(typeID == 7): #EAQUEL TO
+            val =  1 if packagesValues[0] == packagesValues[1] else 0
 
         
         print('left over: ', pack)
+        print('output: ',val)
         print(f'--- END PACKET {version} ---')
-        return packetsSum+version, pack
+        return val, pack
 
 
     
@@ -68,9 +87,9 @@ with open('packets.txt','r') as f:
         line = line.strip('\n')
 
         line = ''.join([ str(bin(int(line[i], 16)))[2:].zfill(4) for i in range(len(line)) ])#.rstrip('0')
-        input(('input:',line))
-        sum,_ = DecodePacket(line)
-        print('output: ',sum)
+        #input(('input:',line))
+        sumOut,_ = DecodePacket(line)
+        print('output: ',sumOut)
 
 
 """
