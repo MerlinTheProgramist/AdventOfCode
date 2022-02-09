@@ -1,4 +1,6 @@
 
-# My take on (AdventOfCode)[https://adventofcode.com/2021] in 2021  
+# My take on [AdventOfCode](https://adventofcode.com/2021) in 2021  
 
-script files are named after 
+scripts files are named with challange number and theme    
+
+most of them is in python, some in js and java
