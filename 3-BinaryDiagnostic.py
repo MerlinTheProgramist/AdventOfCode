@@ -1,3 +1,7 @@
+"""
+Made by MerlinTheProgramist
+(github)[https://github.com/MerlinTheProgramist]
+"""
 
 def binary_to_decimal(binary):
     i,integer = 0,0

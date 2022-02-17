@@ -1,3 +1,7 @@
+"""
+Made by MerlinTheProgramist
+(github)[https://github.com/MerlinTheProgramist]
+"""
 
 horizontal = 0
 deph = 0

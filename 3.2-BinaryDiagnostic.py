@@ -1,3 +1,8 @@
+"""
+Made by MerlinTheProgramist
+(github)[https://github.com/MerlinTheProgramist]
+"""
+
 file = open('BinaryDiagnostic.txt','r')
 content = list(map(lambda x: x.strip('\n'),file.readlines()))
 file.close()

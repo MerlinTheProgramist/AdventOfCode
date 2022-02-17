@@ -1,3 +1,8 @@
+"""
+Made by MerlinTheProgramist
+(github)[https://github.com/MerlinTheProgramist]
+"""
+
 numbers = []
 
 arrays = []
