@@ -16,19 +16,16 @@ class recursionlimit:
         sys.setrecursionlimit(self.old_limit)
 
 
-TILESIZE = 100
+TILESIZE = 10
 TILES = 5#5
 
 SIZE = TILESIZE * TILES
 
-def Draw():
-    for y in range(SIZE):
-        for x in range(SIZE):
-            if(grid[y,x]): print( grid[y,x], end=' ')
-        print()
+
 
 
 grid = np.zeros((SIZE,SIZE))
+grid_path = np.zeros((SIZE,SIZE))
 
 with open('pathFinding.txt','r') as f:
     y=0
@@ -55,13 +52,17 @@ def shortest_to_target(y,x, mem={}):
     if(x>=SIZE or y>=SIZE): return float("inf")
     if(x+1==SIZE and y+1==SIZE): return grid[y,x]
 
-    mem[str([y,x])] =grid[y,x] + min(shortest_to_target(y, x+1, mem), shortest_to_target(y+1, x, mem))
+    a =[shortest_to_target(y, x+1, mem), shortest_to_target(y+1, x, mem)]
+    mem[str([y,x])] =grid[y,x] + min(a)
+    if a[0]<a[1]: grid_path[y,x+1]=1 
+    else: grid_path[y+1,x]=1 
     return mem[str([y,x])]
 
-with recursionlimit(1500):
+with recursionlimit(30000):
     shortest = shortest_to_target(0, 0)
 
 
+Draw()
 print('SUM: ',int(shortest-grid[0,0]))
 
 
