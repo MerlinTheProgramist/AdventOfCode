@@ -4,3 +4,4 @@
 scripts files are named with challange number and theme    
 
 most of them is in python, some in js and java
+very poorly commented code :( 
