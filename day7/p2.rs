@@ -6,7 +6,7 @@ struct Hand {
     order: u8,
 }
 
-const cards: &str = "AKQJT98765432";
+const cards: &str = "AKQT98765432J";
 
 fn main() {
     let mut hands = Vec::new();
@@ -14,6 +14,8 @@ fn main() {
         let (hand, bid) = line.split_once(' ').unwrap();
 
         let bid = bid.parse::<i32>().unwrap();
+        let jokers = hand.as_bytes().iter().filter(|&c| *c==b'J').count() as u8;
+        // println!("{} {}", hand, jokers);
         let points = hand
             .as_bytes()
             .iter()
@@ -22,7 +24,8 @@ fn main() {
         hands.push(Hand {
             hand: points.clone(),
             bid: bid,
-            order: eval_hand(points.clone()),
+            order: eval_hand(points.clone().into_iter().filter(|&c| c!=(cards.len()-1) as u8).collect::<Vec<_>>(), jokers),
+            
         });
     }
 
@@ -50,9 +53,11 @@ fn main() {
 
 struct Pile {
     card: u8,
-    count: i8,
+    count: u8,
 }
-fn eval_hand(mut hand: Vec<u8>) -> u8 {
+fn eval_hand(mut hand: Vec<u8>, jokers:u8) -> u8 {
+    if jokers==5{return 0;}
+    println!("{:?}", hand);
     hand.sort();
     let mut counts = Vec::with_capacity(5);
     counts.push(Pile {
@@ -68,7 +73,10 @@ fn eval_hand(mut hand: Vec<u8>) -> u8 {
     }
     let mut counts = counts.iter().map(|p| p.count).collect::<Vec<_>>();
     counts.sort();
+    *counts.last_mut().unwrap()+=jokers;
 
+    // println!("{:?}",counts);
+    
     return if counts == vec![5] {
         0
     } else if counts == vec![1, 4] {
