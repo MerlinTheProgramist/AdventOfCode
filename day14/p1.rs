@@ -1,4 +1,4 @@
-use utilities;
+use std::fs::read_to_string;
 
 const N: usize = 140;
 
