@@ -46,38 +46,34 @@ impl Rule {
         match self.cmp {
             None => Split{valid:Some((part.clone(), self.result.clone())), invalid:None},
             Some(cmp) => {
-                let range = part[self.val_id];
+                let range = &part[self.val_id];
                 let (invalid,valid) = match cmp {
                     Type::Gt => (range.start..(self.val+1).min(range.end), (self.val+1).max(range.start)..range.end),
                     Type::Lt => (self.val.max(range.start)..range.end, range.start..self.val.min(range.end)),
                 };
-                let invalid = if invalid.len()==0{
+                let invalid = if invalid.len()<=0{
                     None
                 }else{
-                    let new_part = part.clone();
+                    let mut new_part = part.clone();
                     new_part[self.val_id] = invalid;
                     Some((new_part, Resultat::Next()))
                 };
 
-                let valid = if valid.len()==0{
+                let valid = if valid.len()<=0{
                     None
                 }else{
-                    let new_part = part.clone();
+                    let mut new_part = part.clone();
                     new_part[self.val_id] = valid;
-                    Some((new_part, self.result))
+                    Some((new_part, self.result.clone()))
                 };
                 Split{valid, invalid}
-                
             }
         }
     }
 }
 
-fn count_successful(mut part: Part, key:String, rules:&HashMap::<String, Vec<Rule>>) -> usize{
-    for rule in rules[&key]{
-        
-    }
-}
+
+
 
 fn main() {
     let mut rules = HashMap::<String, Vec<Rule>>::new();
@@ -128,23 +124,28 @@ fn main() {
         }
     }
 
+    const N:Range<i32> = 1..4001;
+    
     let mut ans = 0;
-    for line in lines {
-        let mut part: Part = Default::default();
-        for (i, val) in line[1..line.len() - 1].split(',').enumerate() {
-            part[i] = 1..val[2..].parse::<i32>().unwrap();
-        }
-
-        let mut rule = rules["in"].iter();
-        // println!("{:?}", rule);
-        l 
-        if let Resultat::End(end) = res {
-            if end {
-                ans += part.iter().fold(0,|acc, &range| acc+range.len());
-            }
+    let mut stack = Vec::from([([N;4], rules["in"].iter())]);
+    while let Some((part,mut rule)) = stack.pop(){
+        let splitted = rule.next().unwrap().apply(&part);
+        println!("for rule: {:?} \nvalid: {:?} invalid: {:?}\n", rule, splitted.valid, splitted.invalid);
+        for split in [splitted.invalid, splitted.valid]{
+            if let Some((split_part, res)) = split{
+                match res{
+                    Resultat::End(accept) => 
+                        if accept{
+                            ans += split_part.iter().map(|x| x.len()).product::<usize>();    
+                        },
+                    Resultat::Other(other) => 
+                        stack.push((split_part, rules[&other].iter())),
+                    Resultat::Next() => 
+                        stack.push((split_part, rule.clone())),
+                }
+            }        
         }
     }
-
-    println!("{}", ans);
+    println!("{}", ans);    
 }
 
