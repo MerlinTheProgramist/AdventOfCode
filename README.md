@@ -1,11 +1,11 @@
 # [Advent of Code 2021](https://adventofcode.com/2021) (in Python & JS)
 ```py
-  aoc_year: Final[int] = 2023;
+  aoc_year: Final[int] = 2021;
 ```
   Its mostly a mess, but some python solutions are really neat. I didn't finish all of them.
 # [Advent of Code 2022](https://adventofcode.com/2022) (in C++)
 ```cpp
-  const size_t aoc_year {2023};
+  const size_t aoc_year {2022};
 ```
   Only done 13 days  
 # [Advent of Code 2023](https://adventofcode.com/2023) (in Rust)
